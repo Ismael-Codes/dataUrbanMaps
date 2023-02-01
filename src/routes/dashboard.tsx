@@ -1,6 +1,5 @@
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import { LatLngExpression } from 'leaflet';
-import createcategory from './createcategory';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import "leaflet/dist/leaflet.css";

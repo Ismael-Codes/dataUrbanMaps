@@ -26,14 +26,6 @@ function CreateCategory() {
         <div className='flex'>
           <button
             className='bg-white border-2 border-black text-black m-4 p-2'
-            onClick={() => {
-              fetch(`${import.meta.env.VITE_API_URL}/createcategory/name/${name}`, {
-                method: 'POST',
-                headers: {
-                  'Content-Type': 'application/json',
-                },
-              })
-            }}
           >Create Category</button>
           <button
             className='bg-white border-2 border-black text-black m-4 p-2'

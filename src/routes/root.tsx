@@ -22,7 +22,7 @@ export function TablerBrandGithub(props: any) { return (<svg width="1em" height=
             res.json().then((json) => {
                 json.token ? navigate('/dashboard') : (
 
-                        document.getElementById('githubButton')?.removeAttribute('id'),
+                    document.getElementById('githubButton')?.removeAttribute('id'),
                     name === '' || password === '' ? setResponse('please fill all fields') : (
                         setResponse("wrong username or password"),
                         setName(''),
