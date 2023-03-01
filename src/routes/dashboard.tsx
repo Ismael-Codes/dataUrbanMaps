@@ -106,6 +106,48 @@ const Dashboard = () => {
     };
     setCategories([...categories, category]);
     setShowAddMenu(false);
+
+    const fetchCategories = async () => {
+      await fetch("http://localhost/api/addcategory", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ name: categoryName }),
+      });
+    };
+
+    fetchCategories();
+  };
+
+  const createPlace = (
+    placeName: string,
+    category: string,
+    lat: number,
+    lng: number
+  ) => {
+    const place = {
+      name: placeName,
+      category: category,
+      location: {
+        lat: lat,
+        lng: lng,
+      },
+    };
+
+    const fetchPlaces = async () => {
+      const res = await fetch("http://localhost/api/addplace", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(place),
+      });
+
+      const data = await res.json();
+    };
+
+    fetchPlaces();
   };
 
   const [actualPosition, setActualPosition] = useState<LatLngExpression>([
@@ -128,12 +170,16 @@ const Dashboard = () => {
     fetchCategories();
   }, []);
 
-  const [showAddMenu, setShowAddMenu] = useState<boolean>(true);
+  const [showAddMenu, setShowAddMenu] = useState<boolean>(false);
 
   const createSideBar = () => {
     const navigate = useNavigate();
 
     const [categoryName, setCategoryName] = useState<string>("");
+    const [placeName, setplaceName] = useState<string>("");
+    const [placeLat, setPlaceLat] = useState<string>("");
+    const [placeLng, setPlaceLng] = useState<string>("");
+    const [placeCategory, setPlaceCategory] = useState<string>("");
 
     return (
       <div className="w-[380px] h-screen bg-gray-200 fixed top-0 right-0 z-10">
@@ -161,8 +207,6 @@ const Dashboard = () => {
               />
               <button
                 onClick={() => {
-                  console.log(categoryName);
-
                   createCategory(categoryName);
                 }}
                 className="mt-2 rounded-md w-60 bg-slate-800 text-gray-200 font-bold p-1"
@@ -175,19 +219,25 @@ const Dashboard = () => {
                 className="mt-2 rounded-md w-60 border-2 border-gray-500 outline-none placeholder-[#6c6c60] p-1"
                 placeholder="Place Name"
                 type="text"
-                onChange={() => {}}
+                onChange={(e) => {
+                  setplaceName(e.target.value);
+                }}
               />
               <input
                 className="mt-2 rounded-md w-60 border-2 border-gray-500 outline-none placeholder-[#6c6c60] p-1"
                 placeholder="Latitude"
                 type="text"
-                onChange={() => {}}
+                onChange={(e) => {
+                  setPlaceLat(e.target.value);
+                }}
               />
               <input
                 className="mt-2 rounded-md w-60 border-2 border-gray-500 outline-none placeholder-[#6c6c60] p-1"
                 placeholder="Longitude"
                 type="text"
-                onChange={() => {}}
+                onChange={(e) => {
+                  setPlaceLng(e.target.value);
+                }}
               />
               <div className="flex mt-2 w-60 items-center justify-start">
                 <h2 className="text-sm">Select The Category</h2>
@@ -195,12 +245,39 @@ const Dashboard = () => {
               <select
                 className="mt-1 rounded-md w-60 border-2 border-gray-500 outline-none placeholder-[#6c6c60] p-1"
                 size={4}
+                onChange={(e) => {
+                  setPlaceCategory(e.target.value);
+                }}
               >
                 {categories.map((category) => {
                   return <option value={category.name}>{category.name}</option>;
                 })}
               </select>
-              <button className="mt-2 mb-10 rounded-md w-60 bg-slate-800 text-gray-200 font-bold p-1">
+              <button
+                onClick={() => {
+                  setPlaces([
+                    ...places,
+                    {
+                      name: placeName,
+                      lat: parseFloat(placeLat),
+                      lng: parseFloat(placeLng),
+                    },
+                  ]);
+                  setShowAddMenu(!showAddMenu);
+                  setActualPosition([
+                    parseFloat(placeLat),
+                    parseFloat(placeLng),
+                  ]);
+
+                  createPlace(
+                    placeName,
+                    placeCategory,
+                    parseFloat(placeLat),
+                    parseFloat(placeLng)
+                  );
+                }}
+                className="mt-2 mb-10 rounded-md w-60 bg-slate-800 text-gray-200 font-bold p-1"
+              >
                 Create
               </button>
             </div>
