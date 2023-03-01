@@ -22,32 +22,8 @@ const Root = () => {
   const [password, setPassword] = useState("");
   const [response, setResponse] = useState("");
 
-  const handleLogin = () => {
-    fetch(`${import.meta.env.VITE_API_URL}/login`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        name: name,
-        password: password,
-      }),
-    })
-      .then((res) => {
-        res.json().then((json) => {
-          json.token
-            ? navigate("/dashboard")
-            : (document.getElementById("githubButton")?.removeAttribute("id"),
-              name === "" || password === ""
-                ? setResponse("please fill all fields")
-                : (setResponse("wrong username or password"),
-                  setName(""),
-                  setPassword("")));
-        });
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+  const handleLogin = async () => {
+    navigate("/dashboard");
   };
 
   return (
