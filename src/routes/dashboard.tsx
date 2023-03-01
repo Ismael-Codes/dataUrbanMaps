@@ -143,11 +143,14 @@ const Dashboard = () => {
         },
         body: JSON.stringify(place),
       });
-
-      const data = await res.json();
     };
 
     fetchPlaces();
+
+    const newPlaces = places;
+    newPlaces.push({ name: placeName, lat: lat, lng: lng });
+    setPlaces(newPlaces);
+    setShowAddMenu(false);
   };
 
   const [actualPosition, setActualPosition] = useState<LatLngExpression>([
@@ -263,7 +266,6 @@ const Dashboard = () => {
                       lng: parseFloat(placeLng),
                     },
                   ]);
-                  setShowAddMenu(!showAddMenu);
                   setActualPosition([
                     parseFloat(placeLat),
                     parseFloat(placeLng),
