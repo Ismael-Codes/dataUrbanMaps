@@ -5,63 +5,11 @@ import { useNavigate } from "react-router-dom";
 import { useMap } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 
-export function MajesticonsLogoutLine(props: any) {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width="1em"
-      height="1em"
-      viewBox="0 0 24 24"
-      {...props}
-    >
-      <path
-        fill="none"
-        stroke="currentColor"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth="2"
-        d="M15 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h8m4-9l-4-4m4 4l-4 4m4-4H9"
-      ></path>
-    </svg>
-  );
-}
-
-export function MajesticonsPlusCircleLine(props: any) {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width="1em"
-      height="1em"
-      viewBox="0 0 24 24"
-      {...props}
-    >
-      <g fill="currentColor">
-        <path d="M12 4a8 8 0 1 0 0 16a8 8 0 0 0 0-16zM2 12C2 6.477 6.477 2 12 2s10 4.477 10 10s-4.477 10-10 10S2 17.523 2 12zm10-4a1 1 0 0 1 1 1v2h2a1 1 0 1 1 0 2h-2v2a1 1 0 1 1-2 0v-2H9a1 1 0 1 1 0-2h2V9a1 1 0 0 1 1-1z"></path>
-      </g>
-    </svg>
-  );
-}
-
-export function MajesticonsSettingsCogLine(props: any) {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width="1em"
-      height="1em"
-      viewBox="0 0 24 24"
-      {...props}
-    >
-      <g fill="none" stroke="currentColor" strokeWidth="2">
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          d="M14 21h-4l-.551-2.48a6.991 6.991 0 0 1-1.819-1.05l-2.424.763l-2-3.464l1.872-1.718a7.055 7.055 0 0 1 0-2.1L3.206 9.232l2-3.464l2.424.763A6.992 6.992 0 0 1 9.45 5.48L10 3h4l.551 2.48a6.992 6.992 0 0 1 1.819 1.05l2.424-.763l2 3.464l-1.872 1.718a7.05 7.05 0 0 1 0 2.1l1.872 1.718l-2 3.464l-2.424-.763a6.99 6.99 0 0 1-1.819 1.052L14 21z"
-        ></path>
-        <circle cx="12" cy="12" r="3"></circle>
-      </g>
-    </svg>
-  );
-}
+//icons
+import { MajesticonsLogoutLine } from "./icons/MajesticonsLogoutLine";
+import { MajesticonsPlusCircleLine } from "./icons/MajesticonsPlusCircleLine";
+import { MajesticonsSettingsCogLine } from "./icons/MajesticonsSettingsCogLine";
+import { PhTrash } from "./icons/PhTrash";
 
 const ChangeCoordinates = ({
   coordinates,
@@ -118,6 +66,20 @@ const Dashboard = () => {
     };
 
     fetchCategories();
+  };
+
+  const deletePlace = (placeName: string) => {
+    const newPlaces = places.filter((place) => place.name !== placeName);
+    setPlaces(newPlaces);
+    fetch("http://localhost/api/deleteplace", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ name: placeName, category: selectedCategory }),
+    }).then((res) => {
+      alert("Place deleted");
+    });
   };
 
   const createPlace = (
@@ -340,6 +302,15 @@ const Dashboard = () => {
                       {", "}
                       {place.lng}
                     </div>
+
+                    <button
+                      onClick={() => {
+                        deletePlace(place.name);
+                      }}
+                      className="absolute right-0 mr-2 bg-gray-400 p-1 rounded-md"
+                    >
+                      <PhTrash></PhTrash>
+                    </button>
                   </div>
                 </button>
               </div>
